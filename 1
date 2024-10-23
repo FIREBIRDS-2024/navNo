@@ -1,0 +1,33 @@
+void navNoO(){
+  int x0 = Enes100.getX();
+  int y0 = Enes100.getY();
+  
+  moveBackward(); 
+  while (Enes100.getX()> x0){
+    turnRight();
+    moveBackward(); 
+  }
+
+  moveDown(); 
+  while (Enes100.getY()> y0){
+    turnRight();
+    moveDown();
+  }
+
+  
+
+  while (Enes100.getX() =! 0)
+  {
+    Enes100.updateLocation();
+    moveBackward(); 
+    
+  }
+
+  while (Enes100.getY()=! 0)
+  {
+    Enes100.updateLocation(); 
+    moveDown();
+  }
+
+
+}
