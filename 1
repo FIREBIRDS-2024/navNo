@@ -1,33 +1,58 @@
-void navNoO(){
-  int x0 = Enes100.getX();
-  int y0 = Enes100.getY();
-  
-  moveBackward(); 
-  while (Enes100.getX()> x0){
-    turnRight();
-    moveBackward(); 
-  }
+#include "Arduino.h"
+#include "Enes100.h"
+#include "Tank.h"
 
-  moveDown(); 
-  while (Enes100.getY()> y0){
-    turnRight();
-    moveDown();
-  }
 
-  
 
-  while (Enes100.getX() =! 0)
-  {
-    Enes100.updateLocation();
-    moveBackward(); 
+void setup() {
+    Enes100.begin("Simulator", FIRE, 3, 8, 9);
+    Tank.begin();
     
-  }
+    Enes100.println("Starting driving");
+    Tank.setLeftMotorPWM(255);
+    Tank.setRightMotorPWM(255);
+}
 
-  while (Enes100.getY()=! 0)
-  {
-    Enes100.updateLocation(); 
-    moveDown();
+void loop() {
+    delay(1000);
+    Enes100.print("X = "); Enes100.println(Enes100.getX());
+    Enes100.print("Y = "); Enes100.println(Enes100.getY());
+    Enes100.print("Theta = "); Enes100.println(Enes100.getTheta());
+    dist(); 
+}
+
+
+
+void dist(){
+  int trigPin = 11;    // Trigger
+  int echoPin = 12;    // Echo
+  long duration, cm, inches;
+  Serial.begin (9600);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  
+  int x1= 2;
+  int y2 =3; 
+  
+  while(!(Enes100.getX() == x1 && Enes100.getY() == y1)){
+    pinMode(echoPin, INPUT);
+    duration = pulseIn(echoPin, HIGH);
+    cm = (duration/2) / 29.1;     // Divide by 29.1 or multiply by 0.0343
+    inches = (duration/2) / 74;   // Divide by 74 or multiply by 0.0135
+    Serial.print(inches, "in, ");
+    Serial.println("cm", "cm");
+    ob_avoid(inches);
+    delay(250);
+
   }
 
 
 }
+
+void ob_avoid(int in){
+  if(in<5){
+    Enes100.turnRight();
+  }
+  Enes100.Forward();
+}
+
